@@ -1,0 +1,214 @@
+---
+import Base from '../layouts/Base.astro';
+import Scene from '../components/Scene.astro';
+
+const stats = [
+  { k: 'Artifacts', v: '10,000' },
+  { k: 'Holders', v: '6,402' },
+  { k: 'Floor', v: '2.14 ETH' },
+  { k: 'Volume', v: '184K ETH' },
+];
+
+const scenes = [
+  {
+    img: '/img/scene-fortress.jpg',
+    index: '02', kicker: 'THE NORTHERN HOLD',
+    lines: [{ text: 'Frost', mark: 34 }, { text: 'Bastion', mark: 48 }],
+    meta: 'A citadel of blue steel carved into the glacier. Home of the Cryo lineage — the coldest-blooded Meka ever forged.',
+    cta: { label: 'Explore Region', href: '/lore' },
+  },
+  {
+    img: '/img/scene-dunes.jpg',
+    index: '03', kicker: 'THE PALE EXPANSE',
+    lines: [{ text: 'White', mark: 30 }, { text: 'Dunes', mark: 44 }],
+    meta: 'Endless bleached sand where the Nomad units drift between signal towers, trading fragments of the old firmware.',
+    align: 'bottom-left',
+  },
+  {
+    img: '/img/scene-aurora.jpg',
+    index: '04', kicker: 'THE SIGNAL SKY',
+    lines: [{ text: 'Aurora', mark: 40 }, { text: 'Relay', mark: 30 }],
+    meta: 'Above the world the sky burns green with broadcast. Every Meka listens to the relay; only a few can answer.',
+    align: 'center-left',
+  },
+  {
+    img: '/img/scene-canyon.jpg',
+    index: '05', kicker: 'THE RUST CANYON',
+    lines: [{ text: 'Iron', mark: 30 }, { text: 'Gorge', mark: 46 }],
+    meta: 'A wound in the earth where decommissioned frames are laid to rest — and where the Scavenger lineage was born.',
+    align: 'bottom-left',
+  },
+];
+---
+
+<Base title="MekaVerse — Enter the Void" active="Home">
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" data-parallax>
+    <div class="hero__art" style="--bg:url('/img/hero-void.jpg')" data-parallax-layer></div>
+    <div class="hero__grain" aria-hidden="true"></div>
+
+    <div class="hero__marquee" aria-hidden="true">
+      <div class="marquee__track mono-10">
+        {Array.from({ length: 8 }).map(() => (
+          <span>SEASON 02 — GENESIS COLLECTION — 10,000 RENDERED ARTIFACTS — ENTER THE VOID —&nbsp;</span>
+        ))}
+      </div>
+    </div>
+
+    <div class="hero__overlay">
+      <div class="hero__block">
+        <div class="hero__kicker caption reveal">A MONOCHROME GALLERY FOR DIGITAL ARTIFACTS</div>
+        <h1 class="display hero__title reveal" data-delay="1">
+          <span class="mark-line" style="--mark-w:36%;--mark-delay:.35s;">Meka</span>
+          <span class="mark-line" style="--mark-w:52%;--mark-delay:.5s;">Verse</span>
+          <span class="mark-line" style="--mark-w:30%;--mark-delay:.65s;">Awaits</span>
+        </h1>
+        <p class="hero__sub mono-12 reveal" data-delay="2">
+          Ten thousand hand-rendered mecha, hung on the walls of a pure-black gallery.
+          No color but the light they carry. Enter, wander, and take one home.
+        </p>
+        <div class="hero__actions reveal" data-delay="3">
+          <a class="btn" href="/shop">Explore</a>
+          <button class="btn btn--ghost" data-connect type="button">
+            <span class="dot" aria-hidden="true"></span>Connect Wallet
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <a class="scroll-cue mono-10" href="#stats" aria-label="Scroll">
+      SCROLL<span class="scroll-cue__line"></span>
+    </a>
+  </section>
+
+  <!-- ===================== STATS STRIP ===================== -->
+  <section class="stats" id="stats">
+    <div class="stats__grid">
+      {stats.map((s, i) => (
+        <div class="stat reveal" data-delay={String((i % 4) + 1)}>
+          <div class="stat__v display" data-count={s.v}>{s.v}</div>
+          <div class="stat__k caption">{s.k}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ===================== SCENES ===================== -->
+  {scenes.map((s) => <Scene {...s} />)}
+
+  <!-- ===================== MANIFESTO ===================== -->
+  <section class="manifesto">
+    <div class="manifesto__inner">
+      <div class="caption reveal manifesto__label">06 — THE THESIS</div>
+      <p class="manifesto__text subtitle reveal" data-delay="1">
+        We believe the interface should disappear. That the work — the rendered world, the artifact,
+        the light — is the only thing worth looking at. MekaVerse is a gallery with the walls painted
+        out. <span class="dim">Everything here is black so that everything you own can glow.</span>
+      </p>
+      <a class="btn manifesto__cta reveal" data-delay="2" href="/lore">Read the Lore</a>
+    </div>
+  </section>
+
+  <!-- ===================== FINAL CTA ===================== -->
+  <section class="final" data-parallax>
+    <div class="final__art" style="--bg:url('/img/scene-nebula.jpg')" data-parallax-layer></div>
+    <div class="final__overlay">
+      <div class="reveal">
+        <div class="caption final__kicker">07 — MINT IS LIVE</div>
+        <h2 class="display final__title">
+          <span class="mark-line" style="--mark-w:44%;">Claim your</span>
+          <span class="mark-line" style="--mark-w:34%;">Meka.</span>
+        </h2>
+        <p class="mono-12 final__meta">Genesis mint is open. 0.08 ETH · max 3 per wallet · monochrome forever.</p>
+        <div class="final__actions">
+          <a class="btn" href="/shop">Mint Now</a>
+          <a class="btn btn--ghost" href="/gallery">View Gallery</a>
+        </div>
+      </div>
+    </div>
+    <footer class="footline">
+      <span class="mono-10">© 2026 MEKAVERSE</span>
+      <span class="mono-10">BUILT IN THE VOID</span>
+      <span class="mono-10">SEASON 02</span>
+    </footer>
+  </section>
+</Base>
+
+<style>
+  /* ---------- HERO ---------- */
+  .hero { position: relative; height: 100vh; min-height: 640px; overflow: hidden; isolation: isolate; }
+  .hero__art {
+    position: absolute; inset: -8% 0; z-index: -2;
+    background-image: var(--bg); background-size: cover; background-position: center;
+    will-change: transform;
+    animation: slow-zoom 26s ease-in-out infinite alternate;
+  }
+  @keyframes slow-zoom { from { transform: scale(1.02); } to { transform: scale(1.12); } }
+  .hero::before {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background:
+      linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 45%, rgba(0,0,0,0.55) 100%),
+      radial-gradient(100% 70% at 25% 90%, rgba(0,0,0,0.6), transparent 55%);
+  }
+  .hero__grain {
+    position: absolute; inset: 0; z-index: -1; opacity: 0.06; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .hero__marquee { position: absolute; top: 56px; left: 0; right: 0; overflow: hidden; border-bottom: 1px solid var(--frost-10); padding: 9px 0; }
+  .marquee__track { display: inline-flex; white-space: nowrap; color: var(--color-ash); animation: marquee 34s linear infinite; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  .hero__overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 0 60px 90px; }
+  .hero__block { max-width: 760px; }
+  .hero__kicker { color: var(--color-ash); margin-bottom: 24px; }
+  .hero__title { color: var(--color-bone); margin-bottom: 26px; }
+  .hero__title .mark-line { max-width: 100%; }
+  .hero__sub { color: var(--color-ash); max-width: 440px; line-height: 1.55; margin-bottom: 28px; }
+  .hero__actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .scroll-cue { position: absolute; right: 30px; bottom: 34px; display: flex; align-items: center; gap: 10px; color: var(--color-ash); writing-mode: vertical-rl; }
+  .scroll-cue__line { width: 1px; height: 46px; background: linear-gradient(var(--color-frost), transparent); animation: cue 2.2s ease-in-out infinite; transform-origin: top; }
+  @keyframes cue { 0%,100% { transform: scaleY(0.4); opacity: 0.4; } 50% { transform: scaleY(1); opacity: 1; } }
+
+  /* ---------- STATS ---------- */
+  .stats { border-bottom: 1px solid var(--frost-10); background: var(--color-void); }
+  .stats__grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 44px 30px; border-right: 1px solid var(--frost-10); }
+  .stat:last-child { border-right: none; }
+  .stat__v { font-size: 44px; line-height: 1; color: var(--color-bone); }
+  .stat__k { color: var(--color-ash); margin-top: 12px; }
+
+  /* ---------- MANIFESTO ---------- */
+  .manifesto { background: var(--color-void); padding: 130px 60px; border-bottom: 1px solid var(--frost-10); }
+  .manifesto__inner { max-width: 860px; }
+  .manifesto__label { color: var(--color-ash); margin-bottom: 30px; }
+  .manifesto__text { color: var(--color-bone); font-size: 34px; line-height: 1.28; }
+  .manifesto__text .dim { color: var(--color-ash); }
+  .manifesto__cta { margin-top: 40px; }
+
+  /* ---------- FINAL ---------- */
+  .final { position: relative; min-height: 96vh; overflow: hidden; isolation: isolate; display: flex; }
+  .final__art { position: absolute; inset: -8% 0; z-index: -2; background-image: var(--bg); background-size: cover; background-position: center; will-change: transform; }
+  .final::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.3) 55%, rgba(0,0,0,0.7)); }
+  .final__overlay { position: relative; width: 100%; display: flex; align-items: center; padding: 100px 60px; }
+  .final__kicker { color: var(--color-ash); margin-bottom: 22px; }
+  .final__title { color: var(--color-bone); }
+  .final__meta { color: var(--color-ash); margin: 22px 0 26px; }
+  .final__actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .footline { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; padding: 16px 30px; border-top: 1px solid var(--frost-10); color: var(--color-ash); }
+
+  @media (max-width: 900px) {
+    .stats__grid { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--frost-10); }
+  }
+  @media (max-width: 720px) {
+    .hero__overlay { padding: 0 24px 60px; }
+    .hero__title { font-size: 54px; }
+    .manifesto { padding: 90px 24px; }
+    .manifesto__text { font-size: 26px; }
+    .final__overlay { padding: 90px 24px; }
+    .stat__v { font-size: 34px; }
+  }
+</style>

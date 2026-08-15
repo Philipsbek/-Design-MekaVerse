@@ -1,0 +1,182 @@
+---
+const { active = '' } = Astro.props;
+const links = [
+  { label: 'Home', href: '/' },
+  { label: 'Gallery', href: '/gallery' },
+  { label: 'Lore', href: '/lore' },
+  { label: 'Shop', href: '/shop' },
+];
+---
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="logo" href="/" aria-label="MekaVerse home">
+      <span class="logo__glyph" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="14" height="14">
+          <path d="M12 1.5 22.5 12 12 22.5 1.5 12z" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M12 7.2 16.8 12 12 16.8 7.2 12z" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="logo__word mono">MEKAVERSE</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      {links.map((l) => (
+        <a
+          class:list={['nav__link', 'mono-12', { 'is-active': active === l.label }]}
+          href={l.href}
+        >{l.label}</a>
+      ))}
+    </nav>
+
+    <div class="nav__right">
+      <a href="/shop" class="cart mono-10" aria-label="Cart, 0 items">
+        CART<span class="cart__count">[0]</span>
+      </a>
+      <button class="btn connect" id="connectBtn" type="button">
+        <span class="dot" aria-hidden="true"></span>
+        Connect Wallet
+      </button>
+      <button class="burger" id="burger" type="button" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  {links.map((l, i) => (
+    <a class="drawer__link display" href={l.href} style={`--i:${i}`}>{l.label}</a>
+  ))}
+  <div class="drawer__meta caption">MEKAVERSE — SEASON 02 · A MONOCHROME GALLERY</div>
+</div>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 60;
+    border-bottom: 1px solid var(--frost-10);
+    background: transparent;
+    transition: background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease;
+  }
+  .nav.is-solid {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(14px);
+    border-color: var(--frost-20);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    padding: 0 25px;
+  }
+  .logo { display: flex; align-items: center; gap: 9px; }
+  .logo__glyph { display: inline-flex; color: var(--color-bone); }
+  .logo__word {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--color-bone);
+  }
+
+  .nav__links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 7px;
+  }
+  .nav__link {
+    position: relative;
+    color: var(--color-bone);
+    padding: 6px 18px;
+    opacity: 0.72;
+    transition: opacity 0.3s ease;
+  }
+  .nav__link::after {
+    content: '';
+    position: absolute;
+    left: 18px; right: 18px; bottom: -2px;
+    height: 1px;
+    background: var(--color-frost);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+  .nav__link:hover { opacity: 1; }
+  .nav__link:hover::after,
+  .nav__link.is-active::after { transform: scaleX(1); }
+  .nav__link.is-active { opacity: 1; }
+
+  .nav__right { display: flex; align-items: center; gap: 16px; }
+  .cart {
+    color: var(--color-bone);
+    opacity: 0.7;
+    letter-spacing: 0.02em;
+    transition: opacity 0.3s ease;
+  }
+  .cart:hover { opacity: 1; }
+  .cart__count { margin-left: 3px; color: var(--color-ash); }
+
+  .connect { white-space: nowrap; }
+
+  .burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    width: 26px;
+    padding: 6px 2px;
+  }
+  .burger span {
+    display: block;
+    height: 1.5px;
+    background: var(--color-bone);
+    transition: transform 0.35s ease, opacity 0.3s ease;
+  }
+  body.drawer-open .burger span:first-child { transform: translateY(3.25px) rotate(45deg); }
+  body.drawer-open .burger span:last-child { transform: translateY(-3.25px) rotate(-45deg); }
+
+  /* Drawer */
+  .drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    background: var(--color-void);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 30px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1);
+  }
+  body.drawer-open .drawer { opacity: 1; pointer-events: auto; transform: none; }
+  .drawer__link {
+    color: var(--color-bone);
+    line-height: 1;
+    padding: 6px 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    transition-delay: calc(var(--i) * 0.06s + 0.1s);
+  }
+  body.drawer-open .drawer__link { opacity: 1; transform: none; }
+  .drawer__link:hover { color: var(--color-ash); }
+  .drawer__meta {
+    margin-top: 40px;
+    color: var(--color-ash);
+    opacity: 0;
+    transition: opacity 0.6s ease 0.4s;
+  }
+  body.drawer-open .drawer__meta { opacity: 0.7; }
+
+  @media (max-width: 900px) {
+    .nav__links { display: none; }
+    .cart { display: none; }
+    .connect { display: none; }
+    .burger { display: flex; }
+  }
+</style>

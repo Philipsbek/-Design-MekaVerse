@@ -1,0 +1,255 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+
+const {
+  title = 'MekaVerse — A Monochrome Gallery for Digital Artifacts',
+  description = 'MekaVerse is a cinematic web3 world of rendered mecha artifacts. Enter the void, explore the collection, and mint your Meka.',
+  active = 'Home',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#000000" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <title>{title}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1.5 22.5 12 12 22.5 1.5 12z' fill='%23000'/%3E%3Cpath d='M12 6 18 12 12 18 6 12z' fill='%23fff'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <Nav active={active} />
+
+    <main>
+      <slot />
+    </main>
+
+    <!-- Wallet modal -->
+    <div class="modal" id="walletModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Connect wallet">
+      <div class="modal__scrim" data-close></div>
+      <div class="modal__panel">
+        <div class="modal__head">
+          <span class="caption">CONNECT / 0X</span>
+          <button class="modal__x mono-12" data-close aria-label="Close">ESC</button>
+        </div>
+        <h2 class="subtitle">Enter the<br />Void.</h2>
+        <p class="mono-12 modal__body">Select a provider to link your wallet. Nothing is signed — this is a demonstration of the MekaVerse portal shell.</p>
+        <div class="modal__wallets">
+          <button class="wallet-opt" data-wallet="MetaMask">
+            <span class="mono-12">MetaMask</span><span class="caption">POPULAR</span>
+          </button>
+          <button class="wallet-opt" data-wallet="Coinbase">
+            <span class="mono-12">Coinbase Wallet</span><span class="caption">EVM</span>
+          </button>
+          <button class="wallet-opt" data-wallet="WalletConnect">
+            <span class="mono-12">WalletConnect</span><span class="caption">QR</span>
+          </button>
+          <button class="wallet-opt" data-wallet="Ledger">
+            <span class="mono-12">Ledger</span><span class="caption">HARDWARE</span>
+          </button>
+        </div>
+        <div class="modal__foot caption">BY CONNECTING YOU AGREE TO THE VOID TERMS</div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast mono-12" id="toast" role="status" aria-live="polite"></div>
+
+    <style>
+      .modal {
+        position: fixed; inset: 0; z-index: 80;
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; pointer-events: none;
+        transition: opacity 0.35s ease;
+      }
+      .modal.is-open { opacity: 1; pointer-events: auto; }
+      .modal__scrim { position: absolute; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(6px); }
+      .modal__panel {
+        position: relative;
+        width: min(440px, calc(100vw - 40px));
+        background: var(--color-void);
+        border: 1px solid var(--frost-20);
+        border-radius: var(--radius-2xl);
+        padding: 24px;
+        transform: translateY(14px) scale(0.98);
+        transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+      }
+      .modal.is-open .modal__panel { transform: none; }
+      .modal__head { display: flex; justify-content: space-between; align-items: center; color: var(--color-ash); }
+      .modal__x { color: var(--color-ash); border: 1px solid var(--frost-20); border-radius: 2px; padding: 5px 8px; transition: color .3s, border-color .3s; }
+      .modal__x:hover { color: var(--color-bone); border-color: var(--color-frost); }
+      .modal__panel h2 { margin: 22px 0 12px; }
+      .modal__body { color: var(--color-ash); line-height: 1.5; margin-bottom: 20px; }
+      .modal__wallets { display: grid; gap: 8px; }
+      .wallet-opt {
+        display: flex; justify-content: space-between; align-items: center;
+        text-align: left;
+        border: 1px solid var(--frost-20);
+        border-radius: var(--radius-sm);
+        padding: 14px 16px;
+        color: var(--color-bone);
+        transition: border-color .3s, background .3s, transform .3s;
+      }
+      .wallet-opt .caption { color: var(--color-ash); }
+      .wallet-opt:hover { border-color: var(--color-frost); background: rgba(255,255,255,0.03); transform: translateX(3px); }
+      .modal__foot { margin-top: 20px; color: var(--color-ash); opacity: 0.6; text-align: center; }
+
+      .toast {
+        position: fixed;
+        left: 50%; bottom: 30px;
+        transform: translate(-50%, 20px);
+        z-index: 90;
+        background: var(--color-charcoal);
+        border: 1px solid var(--frost-30);
+        border-radius: var(--radius-sm);
+        color: var(--color-bone);
+        padding: 12px 18px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1);
+      }
+      .toast.is-show { opacity: 1; transform: translate(-50%, 0); }
+    </style>
+
+    <script is:inline>
+      // ---- Nav solidify on scroll ----
+      const nav = document.getElementById('nav');
+      const onScroll = () => {
+        if (window.scrollY > 40) nav.classList.add('is-solid');
+        else nav.classList.remove('is-solid');
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      // ---- Mobile drawer ----
+      const burger = document.getElementById('burger');
+      burger?.addEventListener('click', () => {
+        const open = document.body.classList.toggle('drawer-open');
+        burger.setAttribute('aria-expanded', String(open));
+        document.body.style.overflow = open ? 'hidden' : '';
+      });
+      document.querySelectorAll('.drawer__link').forEach((l) =>
+        l.addEventListener('click', () => {
+          document.body.classList.remove('drawer-open');
+          document.body.style.overflow = '';
+        })
+      );
+
+      // ---- Scroll reveal ----
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-in');
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.18, rootMargin: '0px 0px -8% 0px' }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+      // ---- Toast ----
+      let toastT;
+      const toast = document.getElementById('toast');
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('is-show');
+        clearTimeout(toastT);
+        toastT = setTimeout(() => toast.classList.remove('is-show'), 2600);
+      }
+      window.mekaToast = showToast;
+
+      // ---- Parallax on rendered-art layers ----
+      const layers = Array.from(document.querySelectorAll('[data-parallax-layer]'));
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let ticking = false;
+      function parallax() {
+        const vh = window.innerHeight;
+        for (const layer of layers) {
+          const host = layer.closest('[data-parallax]') || layer.parentElement;
+          const rect = host.getBoundingClientRect();
+          if (rect.bottom < -vh || rect.top > vh * 2) continue;
+          const progress = (rect.top + rect.height / 2 - vh / 2) / vh; // -1..1 through viewport
+          layer.style.transform = `translate3d(0, ${(-progress * 60).toFixed(1)}px, 0)`;
+        }
+        ticking = false;
+      }
+      if (!reduce && layers.length) {
+        window.addEventListener('scroll', () => {
+          if (!ticking) { requestAnimationFrame(parallax); ticking = true; }
+        }, { passive: true });
+        window.addEventListener('resize', parallax, { passive: true });
+        parallax();
+      }
+
+      // ---- Count-up stats ----
+      const parseVal = (s) => {
+        const num = parseFloat(s.replace(/[^0-9.]/g, ''));
+        return isNaN(num) ? null : num;
+      };
+      const fmt = (raw, n) => {
+        // preserve prefix/suffix/formatting from the target string
+        const hasComma = raw.includes(',');
+        const suffix = raw.replace(/[0-9.,\s]/g, '');
+        const decimals = (raw.split('.')[1] || '').replace(/\D/g, '').length;
+        let out = decimals ? n.toFixed(decimals) : Math.round(n).toString();
+        if (hasComma) out = Number(out).toLocaleString('en-US', { minimumFractionDigits: decimals });
+        return out + (suffix ? ' ' + suffix : '');
+      };
+      const countIO = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const el = e.target;
+          const raw = el.getAttribute('data-count');
+          const target = parseVal(raw);
+          countIO.unobserve(el);
+          if (target === null || reduce) return;
+          const dur = 1400; const start = performance.now();
+          const tick = (now) => {
+            const p = Math.min(1, (now - start) / dur);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = fmt(raw, target * eased);
+            if (p < 1) requestAnimationFrame(tick);
+            else el.textContent = raw;
+          };
+          requestAnimationFrame(tick);
+        });
+      }, { threshold: 0.6 });
+      document.querySelectorAll('[data-count]').forEach((el) => countIO.observe(el));
+
+      // ---- Wallet modal ----
+      const modal = document.getElementById('walletModal');
+      const openModal = () => { modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false'); };
+      const closeModal = () => { modal.classList.remove('is-open'); modal.setAttribute('aria-hidden', 'true'); };
+      document.getElementById('connectBtn')?.addEventListener('click', openModal);
+      document.querySelectorAll('[data-connect]').forEach((b) => b.addEventListener('click', openModal));
+      modal.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', closeModal));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+      modal.querySelectorAll('.wallet-opt').forEach((b) =>
+        b.addEventListener('click', () => {
+          const w = b.getAttribute('data-wallet');
+          closeModal();
+          const addr = '0x' + Array.from({ length: 4 }, () => Math.floor(Math.random() * 16).toString(16)).join('') + '…' +
+            Array.from({ length: 4 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+          const btn = document.getElementById('connectBtn');
+          if (btn) btn.querySelector('.dot')?.classList.add('connected');
+          if (btn) btn.lastChild.textContent = ' ' + addr;
+          showToast(w + ' linked · ' + addr);
+        })
+      );
+    </script>
+  </body>
+</html>

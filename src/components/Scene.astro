@@ -1,0 +1,87 @@
+---
+// Full-bleed rendered-art section with overlaid stacked title + underline marks.
+const {
+  img,
+  index = '01',
+  kicker = '',
+  lines = [],           // array of { text, mark } — mark = width % of underline
+  meta = '',
+  align = 'bottom-left', // bottom-left | center-left | bottom-center
+  cta = null,            // { label, href } | null
+  minh = '100vh',
+} = Astro.props;
+---
+
+<section class="scene" style={`--bg:url('${img}'); --minh:${minh};`} data-parallax>
+  <div class="scene__art" data-parallax-layer></div>
+  <div class="scene__grain" aria-hidden="true"></div>
+  <div class:list={['scene__overlay', `align-${align}`]}>
+    <div class="scene__block reveal">
+      <div class="scene__topmeta caption">
+        <span class="idx">{index}</span>
+        {kicker && <span class="kicker">— {kicker}</span>}
+      </div>
+      <h2 class="display scene__title">
+        {lines.map((l, i) => (
+          <span class="mark-line" style={`--mark-w:${l.mark ?? 40}%; --mark-delay:${0.25 + i * 0.12}s;`}>{l.text}</span>
+        ))}
+      </h2>
+      {meta && <p class="scene__meta mono-12">{meta}</p>}
+      {cta && <a class="btn scene__cta" href={cta.href}>{cta.label}</a>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .scene {
+    position: relative;
+    min-height: var(--minh);
+    overflow: hidden;
+    display: flex;
+    isolation: isolate;
+  }
+  .scene__art {
+    position: absolute;
+    inset: -8% 0 -8% 0;
+    background-image: var(--bg);
+    background-size: cover;
+    background-position: center;
+    z-index: -2;
+    will-change: transform;
+  }
+  .scene::before {
+    /* cinematic vignette + top/bottom fade so black UI reads on any art */
+    content: '';
+    position: absolute; inset: 0; z-index: -1;
+    background:
+      linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 42%, rgba(0,0,0,0.35) 100%),
+      radial-gradient(120% 80% at 30% 100%, rgba(0,0,0,0.5), transparent 60%);
+  }
+  .scene__grain {
+    position: absolute; inset: 0; z-index: -1;
+    opacity: 0.05; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .scene__overlay {
+    position: relative;
+    width: 100%;
+    display: flex;
+    padding: 90px 60px 70px;
+  }
+  .align-bottom-left { align-items: flex-end; justify-content: flex-start; }
+  .align-center-left { align-items: center; justify-content: flex-start; }
+  .align-bottom-center { align-items: flex-end; justify-content: center; text-align: left; }
+
+  .scene__block { max-width: 900px; }
+  .scene__topmeta { color: var(--color-ash); margin-bottom: 20px; display: flex; gap: 8px; }
+  .scene__topmeta .idx { color: var(--color-bone); }
+  .scene__title { color: var(--color-bone); }
+  .scene__meta { color: var(--color-ash); margin-top: 22px; max-width: 460px; line-height: 1.5; }
+  .scene__cta { margin-top: 24px; }
+
+  @media (max-width: 720px) {
+    .scene__overlay { padding: 90px 24px 48px; }
+    .scene__title { font-size: 46px; }
+    .mark-line { max-width: 90%; }
+  }
+</style>

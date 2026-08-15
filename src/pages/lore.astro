@@ -1,0 +1,148 @@
+---
+import Base from '../layouts/Base.astro';
+import Scene from '../components/Scene.astro';
+
+const chapters = [
+  {
+    img: '/img/scene-storm.jpg',
+    index: 'I', kicker: 'THE FIRST BROADCAST',
+    lines: [{ text: 'The', mark: 30 }, { text: 'Signal', mark: 46 }],
+    meta: 'Before the Meka, there was only the signal — a single carrier wave that would not stop repeating across a dead world.',
+    align: 'center-left',
+    minh: '100vh',
+  },
+  {
+    img: '/img/scene-forest.jpg',
+    index: 'II', kicker: 'THE FIRST FRAME',
+    lines: [{ text: 'Green', mark: 34 }, { text: 'Genesis', mark: 52 }],
+    meta: 'Where the signal touched the old forests, the first frames woke — slow, curious, and already listening for one another.',
+    align: 'bottom-left',
+    minh: '100vh',
+  },
+  {
+    img: '/img/scene-peaks.jpg',
+    index: 'III', kicker: 'THE FOUR LINEAGES',
+    lines: [{ text: 'The', mark: 30 }, { text: 'Splitting', mark: 56 }],
+    meta: 'Cryo went north to the ice. Nomad went to the dunes. Relay climbed to the sky. Scavenger fell to the canyon. Four ways of hearing the same sound.',
+    align: 'bottom-left',
+    minh: '100vh',
+  },
+];
+
+const lineages = [
+  { name: 'Cryo', tag: 'THE PATIENT', body: 'Cold-running frames that think in centuries. They hold the northern bastion and rarely speak first.', pct: '24%' },
+  { name: 'Nomad', tag: 'THE DRIFTERS', body: 'Sand-worn units that trade firmware fragments across the pale expanse. They own nothing and remember everything.', pct: '31%' },
+  { name: 'Relay', tag: 'THE LISTENERS', body: 'Sky-bound antennae-kin who answer the broadcast. The rarest, the loudest, the first to know.', pct: '17%' },
+  { name: 'Scavenger', tag: 'THE REBORN', body: 'Assembled from the canyon of the decommissioned. No two are alike; all of them are stubborn.', pct: '28%' },
+];
+---
+
+<Base title="MekaVerse — Lore" active="Lore" description="The origin of the MekaVerse — the signal, the genesis, and the four lineages.">
+  <!-- intro -->
+  <section class="lintro">
+    <div class="lintro__inner">
+      <div class="caption reveal lintro__kick">THE WORLD — SEASON 02 CANON</div>
+      <h1 class="display reveal lintro__title" data-delay="1">
+        <span class="mark-line" style="--mark-w:38%;">A world</span>
+        <span class="mark-line" style="--mark-w:30%;">told in</span>
+        <span class="mark-line" style="--mark-w:52%;">the dark.</span>
+      </h1>
+      <p class="subtitle reveal lintro__lede" data-delay="2">
+        Four chapters. Four lineages. One signal that never stopped.
+      </p>
+    </div>
+  </section>
+
+  {chapters.map((c) => <Scene {...c} />)}
+
+  <!-- lineages breakdown -->
+  <section class="lineages">
+    <div class="lineages__head">
+      <div class="caption reveal">IV — THE LINEAGES</div>
+      <h2 class="display reveal lineages__title" data-delay="1">
+        <span class="mark-line" style="--mark-w:48%;">Four ways</span>
+        <span class="mark-line" style="--mark-w:34%;">to hear.</span>
+      </h2>
+    </div>
+    <div class="lineages__grid">
+      {lineages.map((l, i) => (
+        <article class="lin reveal" data-delay={String((i % 4) + 1)}>
+          <div class="lin__top">
+            <span class="display lin__name">{l.name}</span>
+            <span class="caption lin__pct" data-count={l.pct}>{l.pct}</span>
+          </div>
+          <div class="caption lin__tag">{l.tag}</div>
+          <p class="mono-12 lin__body">{l.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- pull quote -->
+  <section class="pquote">
+    <p class="pquote__text subtitle reveal">
+      “We painted the walls black not to hide the world, but to prove it could shine without them.”
+    </p>
+    <div class="caption pquote__by reveal" data-delay="1">— THE FIRST RELAY, FRAGMENT 0001</div>
+  </section>
+
+  <!-- cta -->
+  <section class="lcta" data-parallax>
+    <div class="lcta__art" style="--bg:url('/img/scene-island.jpg')" data-parallax-layer></div>
+    <div class="lcta__overlay reveal">
+      <div class="caption lcta__kick">CONTINUE</div>
+      <h2 class="display lcta__title">
+        <span class="mark-line" style="--mark-w:44%;">Own a</span>
+        <span class="mark-line" style="--mark-w:34%;">chapter.</span>
+      </h2>
+      <a class="btn" href="/shop">Mint a Meka</a>
+    </div>
+  </section>
+
+  <style>
+    .lintro { padding: 150px 60px 90px; max-width: 1000px; }
+    .lintro__kick { color: var(--color-ash); margin-bottom: 24px; }
+    .lintro__title { color: var(--color-bone); margin-bottom: 30px; }
+    .lintro__lede { color: var(--color-ash); max-width: 620px; }
+
+    .lineages { padding: 120px 60px; border-top: 1px solid var(--frost-10); }
+    .lineages__head { margin-bottom: 60px; }
+    .lineages__title { color: var(--color-bone); margin-top: 22px; }
+    .lineages__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .lin {
+      border: 1px solid var(--frost-10);
+      border-radius: var(--radius-2xl);
+      padding: 30px;
+      transition: border-color .4s ease, background .4s ease;
+    }
+    .lin:hover { border-color: var(--frost-30); background: rgba(255,255,255,0.015); }
+    .lin__top { display: flex; justify-content: space-between; align-items: baseline; }
+    .lin__name { font-size: 46px; color: var(--color-bone); }
+    .lin__pct { color: var(--color-ash); }
+    .lin__tag { color: var(--color-ash); margin-top: 14px; }
+    .lin__body { color: var(--color-ash); line-height: 1.55; margin-top: 16px; max-width: 44ch; }
+
+    .pquote, .pquote__text { }
+    .pquote { padding: 130px 60px; text-align: center; border-top: 1px solid var(--frost-10); }
+    .pquote__text { color: var(--color-bone); max-width: 900px; margin: 0 auto; font-size: 36px; line-height: 1.3; }
+    .pquote__by { color: var(--color-ash); margin-top: 30px; }
+
+    .lcta { position: relative; min-height: 80vh; overflow: hidden; isolation: isolate; display: flex; }
+    .lcta__art { position: absolute; inset: -8% 0; z-index: -2; background-image: var(--bg); background-size: cover; background-position: center; will-change: transform; }
+    .lcta::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.3) 55%, rgba(0,0,0,0.6)); }
+    .lcta__overlay { position: relative; align-self: flex-end; padding: 60px; }
+    .lcta__kick { color: var(--color-ash); margin-bottom: 20px; }
+    .lcta__title { color: var(--color-bone); margin-bottom: 24px; }
+
+    @media (max-width: 820px) {
+      .lintro { padding: 120px 24px 70px; }
+      .lintro__title { font-size: 52px; }
+      .lineages { padding: 80px 24px; }
+      .lineages__grid { grid-template-columns: 1fr; }
+      .lin__name { font-size: 38px; }
+      .pquote { padding: 90px 24px; }
+      .pquote__text { font-size: 26px; }
+      .lcta__overlay { padding: 30px 24px; }
+    }
+  </style>
+</Base>
